@@ -236,7 +236,7 @@ backToLessons.addEventListener("click", () => {
   }
 });
 
-// Update mode switching in your existing code
+// Update mode switching 
 practiceMode.addEventListener("click", () => {
   practiceMode.classList.add("active");
   learningMode.classList.remove("active");
