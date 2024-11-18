@@ -7,17 +7,73 @@
 <body>
     <div class="container">
         <h1>Sign Language Interpreter</h1>
-        <div class="video-container">
-            <video id="videoElement" autoplay></video>
-            <canvas id="previewCanvas" style="display: none;"></canvas>
+        
+        <div class="mode-controls">
+            <button id="practiceMode" class="mode-button active">Practice Mode</button>
+            <button id="learningMode" class="mode-button">Learning Mode</button>
         </div>
-        <div class="controls">
-            <button id="captureBtn" class="button">Capture Sign</button>
-            <button id="stopBtn" class="button" style="display: none;">Stop Camera</button>
+
+        <!-- Practice Mode Container -->
+        <div id="practiceContainer">
+            <div class="video-container">
+                <video id="videoElement" autoplay></video>
+                <canvas id="previewCanvas" style="display: none;"></canvas>
+            </div>
+            <div class="controls">
+                <button id="captureBtn" class="button">Capture Sign</button>
+                <button id="stopBtn" class="button" style="display: none;">Stop Camera</button>
+            </div>
+            <div id="result" class="result-box"></div>
+            <div id="loading" class="loading" style="display: none;">
+                Interpreting sign...
+            </div>
         </div>
-        <div id="result" class="result-box"></div>
-        <div id="loading" class="loading" style="display: none;">
-            Interpreting sign...
+
+        <!-- Learning Mode Container -->
+        <div id="learningContainer" style="display: none;">
+            <div class="lessons-grid">
+                <div class="lesson-card" data-lesson="alphabet">
+                    <h3>ASL Alphabet</h3>
+                    <p>Learn to fingerspell the alphabet in American Sign Language</p>
+                    <div class="lesson-progress">Progress: 0/26</div>
+                </div>
+                <div class="lesson-card" data-lesson="numbers">
+                    <h3>Numbers 1-10</h3>
+                    <p>Learn basic number signs in ASL</p>
+                    <div class="lesson-progress">Progress: 0/10</div>
+                </div>
+                <div class="lesson-card" data-lesson="basics">
+                    <h3>Basic Phrases</h3>
+                    <p>Common everyday phrases in ASL</p>
+                    <div class="lesson-progress">Progress: 0/10</div>
+                </div>
+            </div>
+
+            <!-- Lesson Content Container -->
+						<div id="lessonContent" style="display: none;">
+							<button id="backToLessons" class="button">← Back to Lessons</button>
+							<div id="lessonTitle" class="lesson-title"></div>
+							
+							<div class="learning-grid">
+								<!-- Practice Area - Left Side -->
+								<div class="practice-area">
+									<div class="video-container">
+										<video id="learningVideo" autoplay></video>
+									</div>
+									<button id="learningCaptureBtn" class="button">Check My Sign</button>
+									<div id="learningResult" class="result-box"></div>
+								</div>
+
+								<!-- Reference Area - Right Side -->
+								<div class="reference-area">
+									<h3>ASL Alphabet Reference</h3>
+									<img src="/static/examples/asl-alphabet.png" alt="ASL Alphabet Reference" class="reference-image">
+								</div>
+							</div>
+							
+							<div class="signs-grid" id="signsGrid"></div>
+					</div>
+
         </div>
     </div>
     <script src="/static/app.js"></script>

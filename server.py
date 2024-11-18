@@ -33,28 +33,65 @@ def serve_static(path):
 @app.route('/interpret', methods=['POST'])
 def interpret_sign():
     try:
-        # Get image data from request
-        image_data = request.json['image'].split(',')[1]
-        image_bytes = base64.b64decode(image_data)
+        # Get request data
+        data = request.json
+        image_data = data['image'].split(',')[1]
+        mode = data.get('mode', 'practice')
+        expected_sign = data.get('expectedSign')
         
         # Convert to PIL Image
+        image_bytes = base64.b64decode(image_data)
         image = Image.open(io.BytesIO(image_bytes))
-        
-        # Generate interpretation
-        prompt = """
-        Analyze this image and interpret the sign language gesture shown.
-        If you can identify a specific sign language gesture, provide:
-        1. The meaning of the sign
-        2. Which sign language system it's from (ASL, BSL, etc.)
-        If no clear gesture is detected, please indicate that.
-        """
+
+        if mode == 'learning':
+            prompt = f"""
+            You are analyzing an ASL fingerspelling attempt for letter '{expected_sign}'.
+            Provide feedback in exactly this format:
+
+            Accuracy: [X]%
+
+            Correct:
+            - [Point 1]
+            - [Point 2]
+
+            Needs Work:
+            - [Point 1]
+            - [Point 2]
+
+            Tip:
+            [One specific, clear practice tip]
+
+            Use bullet points and keep feedback concise.
+            """
+        else:
+            prompt = """
+            Analyze this sign language gesture and provide feedback in this format:
+
+            Sign Detected: 
+            [Describe what sign/number/letter you see]
+
+            Sign Language System:
+            [Specify which sign language system, e.g., ASL, BSL]
+
+            Additional Info:
+            [Any additional relevant information about the sign's usage or meaning]
+
+            If no clear gesture is detected, please indicate that.
+            """
         
         response = model.generate_content([prompt, image])
         interpretation = response.text
         
-        return jsonify({"interpretation": interpretation})
+        return jsonify({
+            "interpretation": interpretation,
+            "mode": mode,
+            "expectedSign": expected_sign if mode == 'learning' else None
+        })
+        
     except Exception as e:
+        print(f"Error: {str(e)}")  # Server-side logging
         return jsonify({"error": str(e)}), 500
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
