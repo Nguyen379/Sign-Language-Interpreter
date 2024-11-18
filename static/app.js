@@ -51,7 +51,7 @@ async function captureAndInterpret() {
     loading.style.display = "block";
     result.textContent = "";
 
-    const response = await fetch("http://localhost:5000/interpret", {
+    const response = await fetch("/interpret", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

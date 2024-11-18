@@ -8,14 +8,19 @@ from PIL import Image
 import io
 
 app = Flask(__name__, static_folder='static')
-CORS(app)
-
+CORS(app, resources={
+    r"/*": {
+        "origins": ["http://localhost:5000", "http://127.0.0.1:5000"],
+        "methods": ["GET", "POST", "OPTIONS"],
+        "allow_headers": ["Content-Type"]
+    }
+})
 # Load environment variables
 load_dotenv()
 
 # Configure Gemini API
 genai.configure(api_key=os.getenv('GOOGLE_API_KEY'))
-model = genai.GenerativeModel('gemini-pro-vision')
+model = genai.GenerativeModel('gemini-1.5-flash')
 
 @app.route('/')
 def home():
